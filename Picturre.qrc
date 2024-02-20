@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/">
+        <file>PNG/trollstore.png</file>
+        <file>PNG/create.png</file>
+    </qresource>
+</RCC>
