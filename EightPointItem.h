@@ -15,8 +15,8 @@ class ItemProperty
 {
 public:
     bool isClicked = false ;
-    int orignWidth = 100 ;
-    int orignHeight = 100 ;
+    QPointF m_startPos;
+    QRectF m_originalRect;
 };
 
 class EightPointItem : public QObject , public QGraphicsItem
@@ -34,7 +34,23 @@ public:
 private:
     void mousePressEvent(QGraphicsSceneMouseEvent* event)  ;
     void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
+    void mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
+    {
+        ItemProperty.m_startPos = QPointF();
+    }
+    void hoverLeaveEvent(QGraphicsSceneHoverEvent *event) override
+    {
+        setCursor(Qt::ArrowCursor); // 鼠标离开时恢复默认鼠标手势
+    }
+    void hoverMoveEvent(QGraphicsSceneHoverEvent *event) override;
+
+
 private:
+    bool isOnBorder(const QPointF &pos);
+
+    void setRect(const QRectF &rect);
+
+
 
 };
 

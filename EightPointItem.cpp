@@ -3,7 +3,7 @@
 EightPointItem::EightPointItem(QGraphicsItem *parent)
     : QGraphicsItem(parent)
 {
-
+    this->setAcceptHoverEvents(true);
 }
 
 QRectF EightPointItem::boundingRect() const
@@ -37,7 +37,7 @@ void EightPointItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *op
 
 
         // 绘制四个圆
-         painter->setBrush(Qt::red);
+        painter->setBrush(Qt::red);
         painter->setPen(Qt::NoPen); // 设置无边框
         painter->drawEllipse(topCorner, radius, radius);
         painter->drawEllipse(buttomCorner, radius, radius);
@@ -64,30 +64,48 @@ void EightPointItem::mousePressEvent(QGraphicsSceneMouseEvent* event)
 {
     if (event->button() == Qt::LeftButton) {
         itemProperty.isClicked = true ;
+        if (isOnBorder(event->pos())) {
+            ItemProperty.m_startPos = event->pos();
+            ItemProperty.m_originalRect = boundingRect();
+        }
         update();
     }
 }
 
 void EightPointItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
-    if(! itemProperty.isClicked) return ;
-    QPointF scenePos = event->scenePos();
-    QPointF itemPos = mapToScene(0, 0);
-    QRectF rect = boundingRect();
-    // 计算鼠标位置与矩形每个边的距离
-    qreal leftDistance = qAbs(scenePos.x() - itemPos.x());
-    qreal rightDistance = qAbs(scenePos.x() - (itemPos.x() + rect.width()));
-    qreal topDistance = qAbs(scenePos.y() - itemPos.y());
-    qreal bottomDistance = qAbs(scenePos.y() - (itemPos.y() + rect.height()));
-    qDebug()<<leftDistance<<rightDistance<<topDistance<<bottomDistance;
-    // 找出距离最小的那个边
-    qreal minDistance = qMin(qMin(qMin(leftDistance, rightDistance), topDistance), bottomDistance);
-    // 如果这个边的距离小于或等于3个像素，改变鼠标手势；否则，保持原样
-    if (minDistance <= 10) {
-        setCursor(Qt::SizeAllCursor); // 缩放手势
-    } else {
-        setCursor(Qt::ArrowCursor);   // 默认手势
+    if (!ItemProperty.m_startPos.isNull()) {
+        QPointF delta = event->pos() - ItemProperty.m_startPos;
+        QRectF newRect = ItemProperty.m_originalRect.adjusted(0, 0, delta.x(), delta.y());
+        setRect(newRect);
     }
+}
+
+void EightPointItem::hoverMoveEvent(QGraphicsSceneHoverEvent *event)
+{
+    qDebug()<<"hover enter";
+    if (isOnBorder(event->pos())) {
+        setCursor(Qt::SizeFDiagCursor); // 鼠标悬浮在边上时改变鼠标手势
+    }
+    else
+    {
+        setCursor(Qt::ArrowCursor);
+    }
+}
+
+bool EightPointItem::isOnBorder(const QPointF &pos)
+{
+    qreal x = pos.x();
+    qreal y = pos.y();
+    qreal w = boundingRect().width();
+    qreal h = boundingRect().height();
+    return (qAbs(x) < 5 || qAbs(x - w) < 5 || qAbs(y) < 5 || qAbs(y - h) < 5);
+}
+
+void EightPointItem::setRect(const QRectF &rect)
+{
+    prepareGeometryChange();
+    setPos(rect.topLeft());
 }
 
 
