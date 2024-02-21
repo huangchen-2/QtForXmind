@@ -2,6 +2,7 @@
 #include "ui_mainwidget.h"
 #include <QPixmap>
 #include <QUrl>
+#include <QGraphicsScene>
 
 MainWidget::MainWidget(QWidget *parent)
     : QWidget(parent)
@@ -9,6 +10,10 @@ MainWidget::MainWidget(QWidget *parent)
 {
     ui->setupUi(this);
     this->setWindowFlag(Qt::FramelessWindowHint);
+    QGraphicsScene *scene = new QGraphicsScene;
+    ui->graphicsView->setScene(scene);
+    EightPointItem * item = new EightPointItem;
+    ui->graphicsView->scene()->addItem(item);
 }
 
 MainWidget::~MainWidget()

@@ -38,7 +38,7 @@ border:15px solid black;
            <string/>
           </property>
           <property name="pixmap">
-           <pixmap resource="Picturre.qrc">:/PNG/trollstore.png</pixmap>
+           <pixmap resource="Picture.qrc">:/PNG/trollstore.png</pixmap>
           </property>
           <property name="scaledContents">
            <bool>true</bool>
@@ -105,7 +105,7 @@ background-color:transparent;</string>
           </font>
          </property>
          <property name="icon">
-          <iconset resource="Picturre.qrc">
+          <iconset resource="Picture.qrc">
            <normaloff>:/PNG/create.png</normaloff>:/PNG/create.png</iconset>
          </property>
         </item>
@@ -130,7 +130,7 @@ background-color:transparent;</string>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout">
        <item>
-        <widget class="QWidget" name="widget" native="true"/>
+        <widget class="QGraphicsView" name="graphicsView"/>
        </item>
       </layout>
      </widget>
@@ -139,7 +139,7 @@ background-color:transparent;</string>
   </layout>
  </widget>
  <resources>
-  <include location="Picturre.qrc"/>
+  <include location="Picture.qrc"/>
  </resources>
  <connections/>
 </ui>

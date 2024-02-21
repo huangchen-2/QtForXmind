@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include <QMouseEvent>
+#include "EightPointItem.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWidget; }
